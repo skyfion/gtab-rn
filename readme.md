@@ -20,6 +20,8 @@ npx react-native run-android
 # run cljs
 clj -M -m krell.main -co build.edn -c -r
 ```
-
-**_todo_** make this from babashka 
+or from babasha 
+```shell
+bb dev
+```
 

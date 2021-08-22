@@ -1,0 +1,10 @@
+{:deps           {medley/medley {:mvn/version "1.3.0"}}
+ :paths          ["src"]
+ :min-bb-version "0.4.0"
+ :tasks          {dev             {:task (run '-dev {:parallel true})}
+                  -dev            {:depends [dev:metro-run dev:android-run dev:krell-run]}
+                  dev:metro-run   {:task (shell "npx" "react-native" "start")}
+                  dev:android-run {:task (shell "npx" "react-native" "run-android")}
+                  dev:krell-run   {:task (clojure "-M -m krell.main -co build.edn -c -r")}
+                  }
+ }
