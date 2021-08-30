@@ -20,8 +20,22 @@ npx react-native run-android
 # run cljs
 clj -M -m krell.main -co build.edn -c -r
 ```
-or from babasha 
+or from babashka 
 ```shell
 bb dev
 ```
+
+
+### Production build
+Just add -O advanced to the usual build command:
+
+```shell
+# cljs compile
+clj -M -m krell.main -v -co build.edn -O advanced -c
+# react native compile example
+react-native run-android --variant=release
+```
+
+
+And re-run your app. If you see a weird message about npm_deps.js you may need to restart Metro.
 
