@@ -47,7 +47,8 @@
           word)]))])
 
 (defn viewer [text]
-  [rn/view
-   {:style {:padding   20 :padding-top 40 :font-size 20
-            :flex-wrap :nowrap}}
-   (map (comp lyric-line parse-lyric-line) text)])
+  [rn/scroll-view
+   [rn/view
+    {:style {:padding   20 :padding-top 40 :font-size 20
+             :flex-wrap :nowrap}}
+    (map (comp lyric-line parse-lyric-line) text)]])

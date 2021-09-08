@@ -27,7 +27,16 @@
    "[Em]As he faced the [D]sun he [C]cast no shadow"
    ""
    "[Am][C][D][E]"
-   "And [D]after all,[Asus7] "])
+   "And [D]after all,[Asus7] "
+   "[Asus4]Here's a thought for every man who tries to understand"
+   "what is in his [G]hands  (what's in his hands)"
+   "He [Asus4]walks along the open road of love and life"
+   "surviving if he [G]can   (only if he can)"
+   "-"
+   "[Em]Bound with all the [D]weight of all the [C]words he tried to [G5]say"
+   "[Em]Chained to all the [D]places that he [C]never wished to [G5]stay"
+   "[Em]Bound with all the [D]weight of all the [C]words he tried to [G5]say"
+   "[Em]As he faced the [D]sun he [C]cast no shadow"])
 
 (defn prepare-navigator
   [navigator screen]
