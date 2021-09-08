@@ -7,15 +7,15 @@
             ["@react-navigation/native-stack" :refer [createNativeStackNavigator]]
 
             [clojure.string :as str]
+            [gpad.events :as events]
             [gpad.viewer :as viewer]
             [gpad.song-list :as song-list]))
 
 (def nav-container (r/adapt-react-class NavigationContainer))
 
-
 (defn log [d] (js/console.log d))
 
-(def lyric
+(def raw-lyric
   ["[Asus4]Here's a thought for every man who tries to understand"
    "what is in his [G]hands  (what's in his hands)"
    "He [Asus4]walks along the open road of love and life"
@@ -27,7 +27,7 @@
    "[Em]As he faced the [D]sun he [C]cast no shadow"
    ""
    "[Am][C][D][E]"
-   "And [D]after all,[Asus7]"])
+   "And [D]after all,[Asus7] "])
 
 (defn prepare-navigator
   [navigator screen]
@@ -51,50 +51,46 @@
   (let [[navigator screen] (create-stack-navigator)]
     (prepare-navigator navigator screen)))
 
-(rf/reg-event-fx
-  :navigate-to
-  (fn [{:keys [db]} [_ route]]
-    {:db       db
-     :navigate route}))
+(comment
+  [{:title "wanderwall"
+    :artist "oasis"
+    :lyric raw-lyric}])
 
-(defonce nav-ref-state (atom nil))
-
-(rf/reg-fx
-  :navigate
-  (fn [route]
-    (when-let [nav-ref @nav-ref-state]
-      (.navigate ^js nav-ref route))))
-
+; :on-click #(rf/dispatch [:navigate-to :song])
 (def test-data
-  [{:title "Masha 21" :on-click (fn []
-                                  (rf/dispatch [:navigate-to :song]))}
-   {:title "Dasha 11"}])
-
-(def list-state (r/atom test-data))
+  [{:title "Song 2133"}
+   {:title "Song 11"
+    :lyric raw-lyric}])
 
 (defn songs-page []
-  [song-list/song-list @list-state])
+  (when-let [data (rf/subscribe [:data])]
+    [song-list/song-list @data]))
 
 (defn song-page []
-  [viewer/viewer lyric])
+  (if-let [raw-lyric @(rf/subscribe [:lyric])]
+    [viewer/viewer raw-lyric]
+    [rn/text "empty"])) ; todo add style for an empty state
+
+(defn navigator-menu-button []
+  (r/as-element
+    [rn/button {:title "Go"
+                :onPress #(rf/dispatch [:init-data test-data])}]))
 
 (defn main-page []
   [rn/safe-area-view {:style {:flex 1}} #_{:style {:flex 1 :align-items "center" :justify-content "center"}}
-   [nav-container {:ref #(reset! nav-ref-state %)}
+   [nav-container {:ref #(reset! events/nav-ref-state %)}
     [stack
      [{:name      :main
-       :component songs-page}
+       :component songs-page
+       :options   {
+                   :headerTitle
+                               (fn []
+                     (r/as-element [rn/text "test"]))
+                   :headerRight navigator-menu-button
+                   }
+       }
       {:name      :song
-       :component song-page}]]]
-   #_(case @page-state
-     :main
-     [song-list/song-list @list-state]
-     :song
-     [viewer/viewer lyric])
-
-   #_[rn/flat-list {:data       [{:title "test" :id 1} {:title "test3" :id 2}]
-                    :renderItem item}]
-   #_[rn/text {:style {:font-size 50}} "Hello Krell!!!"]])
+       :component song-page}]]]])
 
 (defn ^:export -main [& args]
   (r/as-element [main-page]))

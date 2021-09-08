@@ -3,20 +3,31 @@
             [reagent.react-native :as rn]
             [clojure.string :as str]))
 
+(defn- block-chords [data]
+  (loop [[a b & xs] data
+         result []]
+    (cond
+      (and (keyword? a) (string? b))
+      (recur xs (conj result [a b]))
+
+      (not (nil? a))
+      (recur (cons b xs) (conj result a))
+
+      :else
+      result)))
+
 (defn parse-lyric-line [lyric]
+  ; todo remove %
   (let [xs
         (remove str/blank?
-                (str/split (str/replace lyric "[" "[%") #"\]|\["))
-        ps
-        (if (= 1 (count xs))
-          xs
-          (map
-            (fn [item]
-              (if (= \% (first item))
-                (keyword (str/join (rest item)))
-                (if (empty? item) nil item)))
-            xs))]
-    (if (string? (first ps)) (conj ps nil) ps)))
+                (str/split (str/replace lyric "[" "[%") #"\]|\["))]
+    (->> xs
+         (mapv
+           (fn [item]
+             (if (= \% (first item))
+               (keyword (str/join (rest item)))
+               (if (empty? item) nil item))))
+         block-chords)))
 
 (defn chord-block [chord text]
   [rn/view
@@ -26,8 +37,14 @@
 
 (defn lyric-line [line]
   [rn/view {:style {:flex-direction :row}}
-   (for [[chord text] (partition 2 line)]
-     [chord-block chord text])])
+   (for [word line]
+     (cond
+       (vector? word) (apply chord-block word)
+       :else
+       [chord-block nil
+        (if (keyword? word)
+          (str (name word) " ")
+          word)]))])
 
 (defn viewer [text]
   [rn/view
