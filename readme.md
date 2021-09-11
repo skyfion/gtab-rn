@@ -1,12 +1,15 @@
 ## GPAD
 
-Small app for storing song lyrics with chords 
+A small app for storing song lyrics with chords.
 
 
 ### Used by
 * [react-native](https://reactnative.dev/docs/) 
 * cljs 
 * [krell](https://github.com/vouch-opensource/krell)
+
+####libs
+* [navigation](https://reactnavigation.org/docs/hello-react-navigation/)
 
 
 ### How to start (for dev)
