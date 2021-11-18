@@ -7,13 +7,13 @@ A small app for storing song lyrics with chords.
 * [react-native](https://reactnative.dev/docs/) 
 * cljs 
 * [krell](https://github.com/vouch-opensource/krell)
+* [firestore](https://rnfirebase.io/firestore/usage)
 
 ####libs
 * [navigation](https://reactnavigation.org/docs/hello-react-navigation/)
 
 
 ### How to start (for dev)
-
 
 ```shell
 # run metro
@@ -27,6 +27,7 @@ or from babashka
 ```shell
 bb dev
 ```
+
 
 
 ### Production build

@@ -9,6 +9,7 @@
             [clojure.string :as str]
             [gpad.events :as events]
             [gpad.viewer :as viewer]
+            [gpad.db :as db]
             [gpad.song-list :as song-list]))
 
 (def nav-container (r/adapt-react-class NavigationContainer))
